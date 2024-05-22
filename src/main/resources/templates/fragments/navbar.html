@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:fragment="header (title)">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+        <title th:text="${title}"></title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4" th:fragment="navbar (active)">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Northwind</a>
+                <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false"
+                        aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav me-auto mt-lg-0">
+                        <!--puede ver el enlace ‘admin’ y ‘logística’-->
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('admin','logistica')">
+                            <a class="nav-link" th:classappend="${active == 'Employee'?'active':''}"
+                               th:href="@{/employee}">Employee</a>
+                        </li>
+                        <!--puede ver el enlace ‘admin’-->
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('admin')">
+                            <a class="nav-link" th:classappend="${active == 'Shipper'?'active':''}"
+                               th:href="@{/shipper}">Shipper</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${active == 'Product'?'active':''}"
+                               th:href="@{/product}">Product</a>
+                        </li>
+                    </ul>
+                    <!--permite validar si el usuario NO ha iniciado sesión(similar al if)-->
+                    <!--permite validar el rol que posee (en caso esté logueado)-->
+                    <div sec:authorize="isAnonymous()">
+                        <a th:href="@{/openLoginWindow}">(Iniciar Sesión)</a>
+                    </div>
+                    <!--mostrar el botón de iniciar sesión a los usuarios no logueados y por el contrario, el botón de cerrar sesión si el usuario está logueado -->
+                    <div sec:authorize="isAuthenticated()">
+                        <span th:text="|Bienvenido ${session.usuario.nombre} ${session.usuario.apellido}|"></span>
+                        <form th:action="@{/logout}" method="post">
+                            <input class="btn btn-link" type="submit" value="(Cerrar Sesión)">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <script th:fragment="footer-bootstrap" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    </body>
+</html>

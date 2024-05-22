@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/navbar.html :: header( title = 'Transportistas')}"></head>
+    <body>
+        <div class="container">
+            <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Shipper')}"></nav>
+            <h2>Lista Transportistas</h2>
+            <a class="btn btn-primary mt-4 mb-4" th:href="@{'/shipper/new'}">Nuevo Transportista</a>
+            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+            <form method="post" th:action="@{/shipper/BuscarTransportistas}">
+                <input name="searchField" class="form-control mb-3" type="text" placeholder="Search"/>
+            </form>
+            <table class="table">
+                <tr>
+                    <th>#</th>
+                    <th>Nombre de la compañia</th>
+                    <th>Teléfono</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr th:each="shipper, info : ${shipperList}">
+                    <td th:text="${info.index + 1}"></td>
+                    <td th:text="${shipper.companyname}"></td>
+                    <td th:text="${shipper.phone}"></td>
+                    <td><a class="btn btn-primary"
+                           th:href="@{'/shipper/edit' + '?id=' + ${shipper.shipperId}}">Editar</a>
+                    </td>
+                    <td><a class="btn btn-danger"
+                           th:href="@{'/shipper/delete' + '?id=' + ${shipper.shipperId}}">Borrar</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <script th:replace="~{fragments/navbar.html :: footer-bootstrap}"></script>
+    </body>
+</html>

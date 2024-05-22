@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/navbar.html :: header( title = 'Transportistas')}"></head>
+    <body>
+        <div class="container">
+            <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Shipper')}"></nav>
+            <div class="row mb-4">
+                <div class="col-md-6 offset-md-3">
+                    <h2 th:text="${shipper.shipperId == 0? 'Nuevo Transportista' : 'Editar Transportista'}"></h2>
+                    <div th:if="${errorCompany != null}" th:text="${errorCompany}" class="alert alert-danger"
+                         role="alert"></div>
+                    <hr/>
+                    <form method="post" th:action="@{'/shipper/save'}" th:object="${shipper}">
+                        <input th:field="*{shipperId}" type="hidden"/>
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la compañía</label>
+                            <input type="text" class="form-control" th:field="*{companyname}" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Teléfono</label>
+                            <input type="text" class="form-control" th:field="*{phone}" />
+                        </div>
+                        <a th:href="@{'/shipper/list'}" class="btn btn-danger">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script th:replace="~{fragments/navbar.html :: footer-bootstrap}"></script>
+    </body>
+</html>

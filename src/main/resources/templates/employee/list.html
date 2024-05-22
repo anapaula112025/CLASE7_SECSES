@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/navbar.html :: header( title = 'Empleados')}"></head>
+    <body>
+        <div class="container">
+            <nav th:replace="~{fragments/navbar.html :: navbar( active = 'Employee')}"></nav>
+            <h2>Lista de empleados</h2>
+            <a class="btn btn-primary mt-4 mb-4" th:href="@{'/employee/new'}">Nuevo Empleado</a>
+            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Fecha de inicio</th>
+                        <th>Salario</th>
+                        <th>Ciudad</th>
+                        <th>Pais</th>
+                        <th>Jefe</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="employee, info : ${listaEmpleados}">
+                        <td th:text="${info.index + 1}"></td>
+                        <td th:text="${employee.firstname} + ' ' +${employee.lastname}"></td>
+                        <td th:text="${employee.hiredate}"></td>
+                        <td th:text="${employee.salary}"></td>
+                        <td th:text="${employee.city}"></td>
+                        <td th:text="${employee.country}"></td>
+                        <td th:if="${employee.manager !=null}" th:text="${employee.manager.firstname} + ' ' + ${employee.manager.lastname}"></td>
+                        <td th:if="${employee.manager ==null}">Sin jefe</td>
+                        <td><a class="btn btn-primary" th:href="@{'/employee/edit' + '?id=' + ${employee.id}}">Editar</a>
+                        </td>
+                        <td><a class="btn btn-danger" th:href="@{'/employee/delete' + '?id=' + ${employee.id}}">Borrar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <h2 class="mt-4">Estadistica de empleados</h2>
+            <hr/>
+            <h4>Cantidad de empleados por región</h4>
+            <table class="table table-sm">
+                <tr>
+                    <th>Región</th>
+                    <th>Cantidad de empleados</th>
+                </tr>
+                <tr th:each="empleadoPorRegion : ${listaEmpleadosPorRegion}">
+                    <td th:text="${empleadoPorRegion.getRegiondescription()}">
+                    <td th:text="${empleadoPorRegion.getCantidadempleados()}"></td>
+                </tr>
+            </table>
+            <h4 class="mt-4">Cantidad de empleados por pais</h4>
+            <table class="table table-sm">
+                <tr>
+                    <th>País</th>
+                    <th>Cantidad de empleados</th>
+                </tr>
+                <tr th:each="empleadoPorPais : ${listaEmpleadosPorPais}">
+                    <td th:text="${empleadoPorPais.getPais()}">
+                    <td th:text="${empleadoPorPais.getCantidad()}"></td>
+                </tr>
+            </table>
+        </div>
+        <script th:replace="~{fragments/navbar.html :: footer-bootstrap}"></script>
+    </body>
+</html>
